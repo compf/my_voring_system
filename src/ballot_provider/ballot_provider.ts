@@ -11,9 +11,10 @@ console.log(__dirname+'/database.db');
 const db = new sqlite3.Database('database/database.db');
 app.post("/newUUID", function (request, response) {
   const body=request.body as AuthorizationInformation;
- let hash=  crypto.createHash("sha256").update(body.uuid+crypto.randomUUID()).digest().toString("base64");
-  var stmt=db.prepare("INSERT INTO BallotAuthorization VALUES(?,?,?,?)");
-  stmt.run(hash,body.provider_id,body.time,body.election);
+  const salt=crypto.randomUUID();
+ let hash=  crypto.createHash("sha256").update(body.uuid+salt).digest().toString("base64");
+  var stmt=db.prepare("INSERT INTO BallotAuthorization VALUES(?,?,?,?,?)");
+  stmt.run(hash,body.provider_id,body.time,body.election,salt);
   stmt.finalize()
 });
 app.get("/",function(request,response){
