@@ -2,6 +2,7 @@ import express from "express";
 import https from "https";
 import fs from "fs";
 import  sqlite3   from "sqlite3";
+import crypto from "crypto";
 
 import { AuthorizationInformation } from "../common/AuthorizationInformation";
 const app = express();
@@ -10,8 +11,9 @@ console.log(__dirname+'/database.db');
 const db = new sqlite3.Database('database/database.db');
 app.post("/newUUID", function (request, response) {
   const body=request.body as AuthorizationInformation;
+ let hash=  crypto.createHash("sha256").update(body.uuid+crypto.randomUUID()).digest().toString("base64");
   var stmt=db.prepare("INSERT INTO BallotAuthorization VALUES(?,?,?,?)");
-  stmt.run(body.uuid,body.provider_id,body.time,body.election);
+  stmt.run(hash,body.provider_id,body.time,body.election);
   stmt.finalize()
 });
 app.get("/",function(request,response){
