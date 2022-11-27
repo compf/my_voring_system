@@ -1,0 +1,19 @@
+{
+    "title":"Bundestagswahl 2021",
+    "uuid":"",
+    "template":true,
+    "authorityId":"",
+    "issueTime":0,
+   "groups":[
+    {
+        "title":"Erstimme",
+        "type":"boolean",
+        "choices":["CDU","SPD","Grüne","FDP","Linke","Afd"]
+    },
+    {
+        "title":"Zweitstimme",
+        "type":"boolean",
+        "choices":["CDU","SPD","Grüne","FDP","Linke","Afd"]
+    }
+   ]
+}

@@ -1,0 +1,18 @@
+{
+  "name": "my_voting_sys",
+  "version": "1.0.0",
+  "description": "a voting system",
+  "main": "index.js",
+  "scripts": {
+    "init": "cp -r src/key_provider/pki build/key_provider/pki && cp -r src/ballot_provider/pki build/ballot_provider/pki &&tsc",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ballot_provider":" npm run  init && node build/ballot_provider/ballot_provider.js",
+    "key_provider":" npm run  init && node build/key_provider/key_provider.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.14",
+    "express": "^4.18.2"
+  }
+}
