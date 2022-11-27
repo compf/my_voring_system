@@ -1,9 +1,18 @@
 import express from "express";
 import https from "https";
 import fs from "fs";
+import  sqlite3   from "sqlite3";
+
+import { AuthorizationInformation } from "../common/AuthorizationInformation";
 const app = express();
-app.post("addAuthen", function (request, response) {
-  console.log(request.body);
+app.use(express.json());
+console.log(__dirname+'/database.db');
+const db = new sqlite3.Database('database/database.db');
+app.post("/newUUID", function (request, response) {
+  const body=request.body as AuthorizationInformation;
+  var stmt=db.prepare("INSERT INTO BallotAuthorization VALUES(?,?,?,?)");
+  stmt.run(body.uuid,body.provider_id,body.time,body.election);
+  stmt.finalize()
 });
 app.get("/",function(request,response){
     response.send("Hello world");
