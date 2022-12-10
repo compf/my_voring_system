@@ -1,3 +1,4 @@
 *.key.pem
 build
 node_modules
+database

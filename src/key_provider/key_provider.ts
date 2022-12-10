@@ -1,6 +1,6 @@
 import { response } from "express";
 import crypto from "crypto";
-import { AuthorizationInformation } from "../common/AuthorizationInformation";
+import { AuthorizationInformation } from "../common/authorization_information";
 const fs = require("fs");
 const https = require("https");
 const message = { msg: "Hello!" };

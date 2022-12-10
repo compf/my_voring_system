@@ -6,8 +6,11 @@
   "scripts": {
     "init": "./copy_stuff.sh &&tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "ballot_db": " npm run  init && node build/ballot_provider/ballot_db.js",
+    "key_provider": " npm run  init && node build/key_provider/key_provider.js",
     "ballot_provider": " npm run  init && node build/ballot_provider/ballot_provider.js",
-    "key_provider": " npm run  init && node build/key_provider/key_provider.js"
+    "ballot_requester": " npm run  init && node build/ballot_requester/index.js"
+
   },
   "author": "",
   "license": "ISC",
