@@ -2,3 +2,6 @@
 build
 node_modules
 database
+pki
+src/*/pki/
+pki
