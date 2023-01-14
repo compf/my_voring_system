@@ -32,7 +32,8 @@ app.post("/getBallot", function (request, response) {
       console.log("compared")
       var insertIssuedStatement=db.prepare("INSERT INTO BallotsIssued VALUES(?,?) ",compareHash,new Date().getTime());
       //insertIssuedStatement.run();
-      let ballot=JSON.parse(readFileSync(__dirname+"/ballot_templates/bundestag.json",{encoding:"utf-8"})) as Ballot;
+      let ballot=JSON.parse(readFileSync(__dirname+"/ballot_templates/bundestag.json",{encoding:"utf-8"})) ;
+      ballot.uuid=body.uuid;
       for(let v of ballot.groups[0].choices){
         console.log(v);
       }

@@ -9,7 +9,8 @@
     "ballot_db": " npm run  init && node build/ballot_provider/ballot_db.js",
     "key_provider": " npm run  init && node build/key_provider/key_provider.js",
     "ballot_provider": " npm run  init && node build/ballot_provider/ballot_provider.js",
-    "ballot_requester": " npm run  init && node build/ballot_requester/index.js"
+    "ballot_requester": " npm run  init && node build/ballot_requester/index.js",
+    "ballot_collector": " npm run  init && node build/ballot_collector/ballot_collector.js"
   },
   "author": "",
   "license": "ISC",
@@ -21,6 +22,7 @@
   "dependencies": {
     "@types/node": "^18.11.9",
     "@types/sqlite3": "^3.1.8",
+    "better-sqlite3": "^8.0.1",
     "ejs": "^3.1.8",
     "sqlite3": "^5.1.2",
     "typescript": "^4.9.4"

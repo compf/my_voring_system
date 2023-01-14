@@ -4,79 +4,141 @@
     <title>Submit Ballot</title>
   </head>
   <body>
-    <form onsubmit="submit();" action="ballotcollector.compf.me/submitBallot">
+    <form
+      method="post"
+      onsubmit="return submitData();"
+      action="https://ballotcollector.compf.me:3002/submitBallot"
+    >
       
-      <label>Erstimme</label>
+      <label>Erstimme</label><br />
       
-        
-      <input type="radio" name="vote" value="Erstimme_CDU" />
-      <label>CDU</label>
+       
+      <input
+        type="radio"
+        name="Erstimme"
+        id="Erstimme_CDU"
+        value="Erstimme_CDU"
+      />
+      <label>CDU</label><br />
+       
+      <input
+        type="radio"
+        name="Erstimme"
+        id="Erstimme_SPD"
+        value="Erstimme_SPD"
+      />
+      <label>SPD</label><br />
+       
+      <input
+        type="radio"
+        name="Erstimme"
+        id="Erstimme_Grüne"
+        value="Erstimme_Grüne"
+      />
+      <label>Grüne</label><br />
+       
+      <input
+        type="radio"
+        name="Erstimme"
+        id="Erstimme_FDP"
+        value="Erstimme_FDP"
+      />
+      <label>FDP</label><br />
+       
+      <input
+        type="radio"
+        name="Erstimme"
+        id="Erstimme_Linke"
+        value="Erstimme_Linke"
+      />
+      <label>Linke</label><br />
+       
+      <input
+        type="radio"
+        name="Erstimme"
+        id="Erstimme_Afd"
+        value="Erstimme_Afd"
+      />
+      <label>Afd</label><br />
       
-        
-      <input type="radio" name="vote" value="Erstimme_SPD" />
-      <label>SPD</label>
+      <label>Zweitstimme</label><br />
       
-        
-      <input type="radio" name="vote" value="Erstimme_Grüne" />
-      <label>Grüne</label>
-      
-        
-      <input type="radio" name="vote" value="Erstimme_FDP" />
-      <label>FDP</label>
-      
-        
-      <input type="radio" name="vote" value="Erstimme_Linke" />
-      <label>Linke</label>
-      
-        
-      <input type="radio" name="vote" value="Erstimme_Afd" />
-      <label>Afd</label>
-      
-      <label>Zweitstimme</label>
-      
-        
-      <input type="radio" name="vote" value="Zweitstimme_CDU" />
-      <label>CDU</label>
-      
-        
-      <input type="radio" name="vote" value="Zweitstimme_SPD" />
-      <label>SPD</label>
-      
-        
-      <input type="radio" name="vote" value="Zweitstimme_Grüne" />
-      <label>Grüne</label>
-      
-        
-      <input type="radio" name="vote" value="Zweitstimme_FDP" />
-      <label>FDP</label>
-      
-        
-      <input type="radio" name="vote" value="Zweitstimme_Linke" />
-      <label>Linke</label>
-      
-        
-      <input type="radio" name="vote" value="Zweitstimme_Afd" />
-      <label>Afd</label>
-      
+       
+      <input
+        type="radio"
+        name="Zweitstimme"
+        id="Zweitstimme_CDU"
+        value="Zweitstimme_CDU"
+      />
+      <label>CDU</label><br />
+       
+      <input
+        type="radio"
+        name="Zweitstimme"
+        id="Zweitstimme_SPD"
+        value="Zweitstimme_SPD"
+      />
+      <label>SPD</label><br />
+       
+      <input
+        type="radio"
+        name="Zweitstimme"
+        id="Zweitstimme_Grüne"
+        value="Zweitstimme_Grüne"
+      />
+      <label>Grüne</label><br />
+       
+      <input
+        type="radio"
+        name="Zweitstimme"
+        id="Zweitstimme_FDP"
+        value="Zweitstimme_FDP"
+      />
+      <label>FDP</label><br />
+       
+      <input
+        type="radio"
+        name="Zweitstimme"
+        id="Zweitstimme_Linke"
+        value="Zweitstimme_Linke"
+      />
+      <label>Linke</label><br />
+       
+      <input
+        type="radio"
+        name="Zweitstimme"
+        id="Zweitstimme_Afd"
+        value="Zweitstimme_Afd"
+      />
+      <label>Afd</label><br />
+      <br />
       <input
         type="text"
         readonly="true"
         hidden="true"
         name="ballot"
-        value=""
+        value="{&#34;title&#34;:&#34;Bundestagswahl 2021&#34;,&#34;uuid&#34;:&#34;9ce861dc-31d2-4376-9088-c5786f38aa96&#34;,&#34;template&#34;:true,&#34;authorityId&#34;:&#34;&#34;,&#34;issueTime&#34;:0,&#34;groups&#34;:[{&#34;title&#34;:&#34;Erstimme&#34;,&#34;type&#34;:&#34;boolean&#34;,&#34;choices&#34;:[&#34;CDU&#34;,&#34;SPD&#34;,&#34;Grüne&#34;,&#34;FDP&#34;,&#34;Linke&#34;,&#34;Afd&#34;],&#34;votes&#34;:{}},{&#34;title&#34;:&#34;Zweitstimme&#34;,&#34;type&#34;:&#34;boolean&#34;,&#34;choices&#34;:[&#34;CDU&#34;,&#34;SPD&#34;,&#34;Grüne&#34;,&#34;FDP&#34;,&#34;Linke&#34;,&#34;Afd&#34;],&#34;votes&#34;:{}}]}"
       />
       <input type="submit" value="Submit" />
     </form>
     <script>
-      for (let input of document.getElementsByTagName("input")) {
-        for (let group of ballot.groups) {
-          for (let v of group.choices) {
-            let inp_element=document.getElementById(group.title+"_"+v);
-            inp_element.removeAttribute("name");
-            if(inp_element.checked){
-                group.votes.set(v,true);
+        function decodeHtml(html) {
+        var txt = document.createElement("textarea");
+        txt.innerHTML = html;
+        return txt.value;
+    }
+      function submitData() {
+        const decoded=decodeHtml(document.getElementsByName("ballot")[0].value)
+        let ballot=JSON.parse(decoded);
+        for (let input of document.getElementsByTagName("input")) {
+          for (let group of ballot.groups) {
+            for (let v of group.choices) {
+                let inp_element = document.getElementById(group.title+"_"+v);
+              inp_element.removeAttribute("name");
+              if (inp_element.checked) {
+                group.votes[v]=true;
+              }
             }
-
           }
         }
       }

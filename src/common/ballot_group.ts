@@ -11,7 +11,7 @@ export class BallotGroup{
         this.choices=choices;
         this.title=title;
         if(votes!=null){
-            for(let v of votes.keys()){
+            for(let v of Object.keys(votes)){
                 if(type=="boolean"){
                     this.votes.set(v, new BooleanVote( v,votes.get(v)));
                 }
