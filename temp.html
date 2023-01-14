@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Submit Ballot</title>
+  </head>
+  <body>
+    <form onsubmit="submit();" action="ballotcollector.compf.me/submitBallot">
+      
+      <label>Erstimme</label>
+      
+        
+      <input type="radio" name="vote" value="Erstimme_CDU" />
+      <label>CDU</label>
+      
+        
+      <input type="radio" name="vote" value="Erstimme_SPD" />
+      <label>SPD</label>
+      
+        
+      <input type="radio" name="vote" value="Erstimme_Grüne" />
+      <label>Grüne</label>
+      
+        
+      <input type="radio" name="vote" value="Erstimme_FDP" />
+      <label>FDP</label>
+      
+        
+      <input type="radio" name="vote" value="Erstimme_Linke" />
+      <label>Linke</label>
+      
+        
+      <input type="radio" name="vote" value="Erstimme_Afd" />
+      <label>Afd</label>
+      
+      <label>Zweitstimme</label>
+      
+        
+      <input type="radio" name="vote" value="Zweitstimme_CDU" />
+      <label>CDU</label>
+      
+        
+      <input type="radio" name="vote" value="Zweitstimme_SPD" />
+      <label>SPD</label>
+      
+        
+      <input type="radio" name="vote" value="Zweitstimme_Grüne" />
+      <label>Grüne</label>
+      
+        
+      <input type="radio" name="vote" value="Zweitstimme_FDP" />
+      <label>FDP</label>
+      
+        
+      <input type="radio" name="vote" value="Zweitstimme_Linke" />
+      <label>Linke</label>
+      
+        
+      <input type="radio" name="vote" value="Zweitstimme_Afd" />
+      <label>Afd</label>
+      
+      <input
+        type="text"
+        readonly="true"
+        hidden="true"
+        name="ballot"
+        value=""
+      />
+      <input type="submit" value="Submit" />
+    </form>
+    <script>
+      for (let input of document.getElementsByTagName("input")) {
+        for (let group of ballot.groups) {
+          for (let v of group.choices) {
+            let inp_element=document.getElementById(group.title+"_"+v);
+            inp_element.removeAttribute("name");
+            if(inp_element.checked){
+                group.votes.set(v,true);
+            }
+
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

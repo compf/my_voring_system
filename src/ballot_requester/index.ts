@@ -12,7 +12,6 @@ const my_provider_id="42e521a4-6c41-4024-912e-cd3d19931b83";
 const req = https.request(
   {
     host: "ballotprovider.compf.me",
-    origin:"keyprovider.compf.me",
     port: 3001,
     secureProtocol: "TLSv1_2_method",
     path: "/getBallot",

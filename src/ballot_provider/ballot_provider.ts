@@ -3,10 +3,12 @@ import https from "https";
 import fs, { readFileSync } from "fs";
 import  sqlite3   from "sqlite3";
 import crypto from "crypto";
+import ejs from "ejs";
 
 import { AuthorizationInformation } from "../common/authorization_information";
 import { BallotRequest } from "../common/ballot_request";
 import { Ballot } from "../common/ballot";
+import { time } from "console";
 const app = express();
 app.use(express.json());
 console.log(__dirname+'/database.db');
@@ -31,8 +33,17 @@ app.post("/getBallot", function (request, response) {
       var insertIssuedStatement=db.prepare("INSERT INTO BallotsIssued VALUES(?,?) ",compareHash,new Date().getTime());
       //insertIssuedStatement.run();
       let ballot=JSON.parse(readFileSync(__dirname+"/ballot_templates/bundestag.json",{encoding:"utf-8"})) as Ballot;
-      response.send(JSON.stringify(ballot));
-      response.end()
+      for(let v of ballot.groups[0].choices){
+        console.log(v);
+      }
+     // console.log(ballot.groups[0].choices);
+      ejs.renderFile(__dirname+"/ballot_templates/html_template.ejs", {ballot}, function(err, str){
+        console.log(str,err);
+        response.send(str);
+        
+        response.end()
+      });
+     
 
     }
   });

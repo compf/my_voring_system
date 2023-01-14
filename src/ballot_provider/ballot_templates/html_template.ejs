@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Submit Ballot</title>
+  </head>
+  <body>
+    <form onsubmit="submit();" action="ballotcollector.compf.me/submitBallot">
+      <% for(let group of ballot.groups){%>
+      <label><%= group.title %></label>
+      <%for(let v of group.choices ){%>
+        <%group.votes=new Map();%>
+      <input type="radio" name="vote" value="<%=group.title+'_'+v %>" />
+      <label><%=v%></label>
+      <% } } %>
+      <input
+        type="text"
+        readonly="true"
+        hidden="true"
+        name="ballot"
+        value="<%JSON.stringify(ballot)%>"
+      />
+      <input type="submit" value="Submit" />
+    </form>
+    <script>
+      for (let input of document.getElementsByTagName("input")) {
+        for (let group of ballot.groups) {
+          for (let v of group.choices) {
+            let inp_element=document.getElementById(group.title+"_"+v);
+            inp_element.removeAttribute("name");
+            if(inp_element.checked){
+                group.votes.set(v,true);
+            }
+
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
