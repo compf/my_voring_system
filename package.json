@@ -25,6 +25,6 @@
     "better-sqlite3": "^8.0.1",
     "ejs": "^3.1.8",
     "sqlite3": "^5.1.2",
-    "typescript": "^4.9.4"
+    "typescript": "^4.9.5"
   }
 }

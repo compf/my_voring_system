@@ -20,7 +20,7 @@ app.post("/getBallot", function (request, response) {
   const body=request.body as BallotRequest ;
   console.log(body);
   var stmt=db.prepare("SELECT * FROM BallotAuthorization ");
-  stmt.each((err,row)=>{
+  stmt.each((err,row:any)=>{
     console.log("both",body.uuid+row.salt)
     const compareHash=crypto.createHash("sha256").update(body.uuid+row.salt).digest("base64");
 
