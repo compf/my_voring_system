@@ -33,7 +33,7 @@ export class KeyProviderService implements DistributedServerService{
   }
 }
 const my_provider_id="42e521a4-6c41-4024-912e-cd3d19931b83";
-if(require.main){
+if(require.main==module){
   const source="keyprovider.compf.me";
   const dest="ballotprovider.compf.me";
   const destPort=3000;

@@ -23,7 +23,7 @@ export class BallotAuthoizationService implements DistributedServerService{
           console.log(body.uuid + salt);
           let hash = crypto.createHash("sha256").update(body.uuid + salt).digest("base64");
           console.log("hash", hash);
-          service.insert("BallotAuthorization",{"id":hash, "provider_id":body.provider_id, "time":body.time.toString(), "election":body.election, "salt":salt});
+          service.insert("BallotAuthorization",{"id":hash, "provider_id":body.provider_id, "time":body.time, "election":body.election, "salt":salt});
           console.log("Received");
         });
   }
@@ -32,7 +32,7 @@ export class BallotAuthoizationService implements DistributedServerService{
     this.dataService=dataService;
   }
 }
-if (require.main) {
+if (require.main==module) {
   const pki_path = __dirname + "/pki/"
   const PORT=3000;
   let channel=new HttpsServerChannel(PORT,fs.readFileSync(pki_path + "ballot_provider.key.pem",{encoding:"utf-8"}),fs.readFileSync(pki_path + "ballot_provider.cert.pem",{encoding:"utf-8"}),true);

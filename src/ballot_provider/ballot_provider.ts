@@ -43,7 +43,7 @@ export class BallotProviderService implements DistributedServerService{
        // console.log(compareHash);
         if(compareHash==row.id && await isValidBallotRequest(row)){
           console.log("compared")
-          service.insert("BallotsIssued",{"uuid":compareHash,"time":new Date().getTime()+""})
+          service.insert("BallotsIssued",{"uuid":compareHash,"time":new Date().getTime()})
           let ballot=JSON.parse(readFileSync(__dirname+"/ballot_templates/bundestag.json",{encoding:"utf-8"})) ;
           ballot.uuid=body.uuid;
           for(let v of ballot.groups[0].choices){
