@@ -1,7 +1,6 @@
 import express from "express";
 import https from "https";
 import fs, { readFileSync } from "fs";
-import  sqlite3   from "sqlite3";
 import crypto from "crypto";
 import ejs from "ejs";
 
@@ -12,12 +11,14 @@ import { time } from "console";
 import { DistributedServerService } from "../util/distributed_server_service";
 import { CommunicationChannel, HttpMethod } from "../util/communication_channel";
 import { HttpsServerChannel } from "../util/https_channel";
-class BallotProviderService implements DistributedServerService{
+import { DataService } from "../util/data_service";
+import { SQLLiteDataService } from "../util/sqlite_data_service";
+export class BallotProviderService implements DistributedServerService{
   channel: CommunicationChannel;
   private db:any;
-   isValidBallotRequest(row:any):boolean{
-    const issuedCountStatement=this.db.prepare("SELECT COUNT(uuid) FROM BallotsIssued WHERE uuid=?",row.id);
-    let cnt=(issuedCountStatement.get() as any).count
+  private dataService:DataService;
+   async isValidBallotRequest(row:any):Promise<boolean>{
+    let cnt=await this.dataService.count("BallotsIssued",(row)=>row["uuid"]==row.id);
     console.log(cnt)
     if(cnt>0){
       return false;
@@ -25,15 +26,14 @@ class BallotProviderService implements DistributedServerService{
     return true;
   }
   run(): void {
-    let db=this.db;
+    let service=this.dataService;
     let channel=this.channel;
     let isValidBallotRequest=this.isValidBallotRequest;
     this.channel.registerEvent("/getBallot",HttpMethod.Post, function (request, response) {
       console.log("request")
       const body=request.body as BallotRequest ;
       console.log(body);
-      var stmt=db.prepare("SELECT * FROM BallotAuthorization ");
-      stmt.each((err:any,row:any)=>{
+      service.query("BallotAuthorization",async (row:any)=>{
         console.log("both",body.uuid+row.salt)
         const compareHash=crypto.createHash("sha256").update(body.uuid+row.salt).digest("base64");
     
@@ -41,10 +41,9 @@ class BallotProviderService implements DistributedServerService{
         console.log()
         const timeDiff=body.time-row.time;
        // console.log(compareHash);
-        if(compareHash==row.id && isValidBallotRequest(row)){
+        if(compareHash==row.id && await isValidBallotRequest(row)){
           console.log("compared")
-          var insertIssuedStatement=db.prepare("INSERT INTO BallotsIssued VALUES(?,?) ",compareHash,new Date().getTime());
-          //insertIssuedStatement.run();
+          service.insert("BallotsIssued",{"uuid":compareHash,"time":new Date().getTime()+""})
           let ballot=JSON.parse(readFileSync(__dirname+"/ballot_templates/bundestag.json",{encoding:"utf-8"})) ;
           ballot.uuid=body.uuid;
           for(let v of ballot.groups[0].choices){
@@ -60,12 +59,11 @@ class BallotProviderService implements DistributedServerService{
          
     
         }
-      });
-      stmt.finalize();
+      },(x)=>true);
     });}
-  constructor(channel:CommunicationChannel){
+  constructor(channel:CommunicationChannel,dataService:DataService){
     this.channel=channel;
-   this.db = new sqlite3.Database('database/database.db');
+   this.dataService=dataService;
   }
 }
 if(require.main){
@@ -73,7 +71,7 @@ if(require.main){
   const BALLOT_PROVIDER_PORT=3001;
   let channel=new HttpsServerChannel(BALLOT_PROVIDER_PORT,  fs.readFileSync(pki_path+"ballot_provider.key.pem",{encoding:"utf-8"}),
  fs.readFileSync(pki_path+"ballot_provider.cert.pem",{encoding:"utf-8"}),false);
- let service=new BallotProviderService(channel);
+ let service=new BallotProviderService(channel, new SQLLiteDataService());
  service.run();
 }
 
