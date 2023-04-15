@@ -17,17 +17,21 @@ export class BallotProviderService implements DistributedServerService{
   channel: CommunicationChannel;
   private db:any;
   private dataService:DataService;
-   async isValidBallotRequest(row:any):Promise<boolean>{
-    let cnt=await this.dataService.count("BallotsIssued",(row)=>row["uuid"]==row.id);
+    isValidBallotRequest(dataService:DataService,row:any):boolean{
+    let cnt= dataService.count("BallotsIssued",(row)=>row["uuid"]==row.id);
     console.log(cnt)
     if(cnt>0){
       return false;
     }
     return true;
   }
+  sendBallot(ballot:string,responseObject:any){
+    this.channel.send(ballot,responseObject);
+  }
   run(): void {
     let service=this.dataService;
     let channel=this.channel;
+    let me=this;
     let isValidBallotRequest=this.isValidBallotRequest;
     this.channel.registerEvent("/getBallot",HttpMethod.Post, function (request, response) {
       console.log("request")
@@ -41,7 +45,7 @@ export class BallotProviderService implements DistributedServerService{
         console.log()
         const timeDiff=body.time-row.time;
        // console.log(compareHash);
-        if(compareHash==row.id && await isValidBallotRequest(row)){
+        if(compareHash==row.id &&  isValidBallotRequest(service,row)){
           console.log("compared")
           service.insert("BallotsIssued",{"uuid":compareHash,"time":new Date().getTime()})
           let ballot=JSON.parse(readFileSync(__dirname+"/ballot_templates/bundestag.json",{encoding:"utf-8"})) ;
@@ -52,7 +56,7 @@ export class BallotProviderService implements DistributedServerService{
          // console.log(ballot.groups[0].choices);
           ejs.renderFile(__dirname+"/ballot_templates/html_template.ejs", {ballot}, function(err, str){
             console.log(str,err);
-            channel.send(str,response);
+            me.sendBallot(str,response)
             
             channel.end(response)
           });
@@ -66,7 +70,7 @@ export class BallotProviderService implements DistributedServerService{
    this.dataService=dataService;
   }
 }
-if(require.main){
+if(require.main==module){
   const pki_path=__dirname+"/pki/"
   const BALLOT_PROVIDER_PORT=3001;
   let channel=new HttpsServerChannel(BALLOT_PROVIDER_PORT,  fs.readFileSync(pki_path+"ballot_provider.key.pem",{encoding:"utf-8"}),

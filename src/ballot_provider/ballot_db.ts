@@ -9,7 +9,7 @@ import { DistributedServerService } from "../util/distributed_server_service";
 import { CommunicationChannel, HttpMethod } from "../util/communication_channel";
 import { DataService } from "../util/data_service";
 import { SQLLiteDataService } from "../util/sqlite_data_service";
-export class BallotAuthoizationService implements DistributedServerService{
+export class BallotAuthorizationService implements DistributedServerService{
   channel: CommunicationChannel;
   dataService:DataService;
   run(): void {
@@ -36,6 +36,6 @@ if (require.main==module) {
   const pki_path = __dirname + "/pki/"
   const PORT=3000;
   let channel=new HttpsServerChannel(PORT,fs.readFileSync(pki_path + "ballot_provider.key.pem",{encoding:"utf-8"}),fs.readFileSync(pki_path + "ballot_provider.cert.pem",{encoding:"utf-8"}),true);
-  let service=new BallotAuthoizationService(channel,new SQLLiteDataService());
+  let service=new BallotAuthorizationService(channel,new SQLLiteDataService());
 
 }
