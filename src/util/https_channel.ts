@@ -16,12 +16,13 @@ export class HttpsServerChannel implements CommunicationChannel {
         this.app.get(channel,callback);
        }
        else if (method== HttpMethod.Post){
+        console.log("register")
         this.app.post(channel,callback);
        }
     }
     constructor(srcPort: number, private_key_path: string, public_key_path: string, request_cert: boolean) {
         this.app=express();
-
+        this.app.use(express.json())
         https
             .createServer(
                 {
@@ -45,7 +46,8 @@ export class HttpsClientChannel implements CommunicationChannel{
     private request:http.ClientRequest;
     response?:http.ServerResponse;
     send(message: string,over:any): void {
-        this.request.write(message);
+        console.log("use channel",message)
+        console.log(this.request.write(message));
     }
     end(over:any): void {
         this.request.end();
@@ -60,20 +62,21 @@ export class HttpsClientChannel implements CommunicationChannel{
         }
         this.request.on(channel,callback);
     }
-    constructor(source:string,dest:string,destPort:number, private_key_path: string, public_key_path: string,channel:string,method:HttpMethod){
+    constructor(source:string,dest:string,destPort:number, private_key_path: string|undefined, public_key_path: string|undefined,channel:string,method:HttpMethod){
+        console.log("ctor",method.toString())
         this.request = https.request(
             {
               host: dest,
               origin:source,
               port: destPort,
               secureProtocol: "TLSv1_2_method",
-              key: fs.readFileSync(private_key_path),
-              cert: fs.readFileSync(public_key_path),
+              key: private_key_path!=undefined ?fs.readFileSync(private_key_path):undefined,
+              cert: public_key_path!=undefined ? fs.readFileSync(public_key_path):undefined,
               ca: 
                 fs.readFileSync(`pki/my_ca-crt.pem`)
               ,
               path: channel,
-              method: method.toString().toUpperCase(),
+              method: HttpMethod[ method].toUpperCase(),
               headers: {
                 "Content-Type": "application/json",
               

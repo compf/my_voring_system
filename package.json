@@ -6,11 +6,11 @@
   "scripts": {
     "init": "./copy_stuff.sh && npx tsc",
     "test": "jest ",
-    "ballot_db": " npm run  init && node build/ballot_provider/ballot_db.js",
-    "key_provider": " npm run  init && node build/key_provider/key_provider.js",
-    "ballot_provider": " npm run  init && node build/ballot_provider/ballot_provider.js",
-    "ballot_requester": " npm run  init && node build/ballot_requester/index.js",
-    "ballot_collector": " npm run  init && node build/ballot_collector/ballot_collector.js"
+    "ballot_db": " npm run  init && node build/src/ballot_provider/ballot_db.js",
+    "key_provider": " npm run  init && node build/src/key_provider/key_provider.js",
+    "ballot_provider": " npm run  init && node build/src/ballot_provider/ballot_provider.js",
+    "ballot_requester": " npm run  init && node build/src/ballot_requester/index.js",
+    "ballot_collector": " npm run  init && node build/src/ballot_collector/ballot_collector.js"
   },
   "author": "",
   "license": "ISC",

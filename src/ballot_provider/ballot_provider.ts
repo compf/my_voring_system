@@ -3,7 +3,6 @@ import https from "https";
 import fs, { readFileSync } from "fs";
 import crypto from "crypto";
 import ejs from "ejs";
-
 import { AuthorizationInformation } from "../common/authorization_information";
 import { BallotRequest } from "../common/ballot_request";
 import { Ballot } from "../common/ballot";
@@ -37,6 +36,7 @@ export class BallotProviderService implements DistributedServerService{
       console.log("request")
       const body=request.body as BallotRequest ;
       console.log(body);
+      let finalHash=""
       service.query("BallotAuthorization",async (row:any)=>{
         console.log("both",body.uuid+row.salt)
         const compareHash=crypto.createHash("sha256").update(body.uuid+row.salt).digest("base64");
@@ -47,23 +47,25 @@ export class BallotProviderService implements DistributedServerService{
        // console.log(compareHash);
         if(compareHash==row.id &&  isValidBallotRequest(service,row)){
           console.log("compared")
-          service.insert("BallotsIssued",{"uuid":compareHash,"time":new Date().getTime()})
-          let ballot=JSON.parse(readFileSync(__dirname+"/ballot_templates/bundestag.json",{encoding:"utf-8"})) ;
-          ballot.uuid=body.uuid;
-          for(let v of ballot.groups[0].choices){
-            console.log(v);
-          }
-         // console.log(ballot.groups[0].choices);
-          ejs.renderFile(__dirname+"/ballot_templates/html_template.ejs", {ballot}, function(err, str){
-            console.log(str,err);
-            me.sendBallot(str,response)
-            
-            channel.end(response)
-          });
+          finalHash=compareHash
+
          
     
         }
       },(x)=>true);
+      service.insert("BallotsIssued",{"uuid":finalHash,"time":new Date().getTime()})
+      let ballot=JSON.parse(readFileSync(__dirname+"/ballot_templates/bundestag.json",{encoding:"utf-8"})) ;
+      ballot.uuid=body.uuid;
+      for(let v of ballot.groups[0].choices){
+        console.log(v);
+      }
+     // console.log(ballot.groups[0].choices);
+      ejs.renderFile(__dirname+"/ballot_templates/html_template.ejs", {ballot}, function(err, str){
+        console.log(str,err);
+        me.sendBallot(str,response)
+        
+        channel.end(response)
+      });
     });}
   constructor(channel:CommunicationChannel,dataService:DataService){
     this.channel=channel;
@@ -73,8 +75,7 @@ export class BallotProviderService implements DistributedServerService{
 if(require.main==module){
   const pki_path=__dirname+"/pki/"
   const BALLOT_PROVIDER_PORT=3001;
-  let channel=new HttpsServerChannel(BALLOT_PROVIDER_PORT,  fs.readFileSync(pki_path+"ballot_provider.key.pem",{encoding:"utf-8"}),
- fs.readFileSync(pki_path+"ballot_provider.cert.pem",{encoding:"utf-8"}),false);
+  let channel=new HttpsServerChannel(BALLOT_PROVIDER_PORT,  pki_path+"ballot_provider.key.pem",pki_path+"ballot_provider.cert.pem",false);
  let service=new BallotProviderService(channel, new SQLLiteDataService());
  service.run();
 }

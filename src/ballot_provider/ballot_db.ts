@@ -14,9 +14,9 @@ export class BallotAuthorizationService implements DistributedServerService{
   dataService:DataService;
   run(): void {
     let service=this.dataService;
+    console.log("service")
 
       this.channel.registerEvent("/newUUID",HttpMethod.Post,function (request,response){
-        
           const body = request.body as AuthorizationInformation;
           const salt = crypto.randomUUID();
           console.log(body.uuid, salt);
@@ -35,7 +35,9 @@ export class BallotAuthorizationService implements DistributedServerService{
 if (require.main==module) {
   const pki_path = __dirname + "/pki/"
   const PORT=3000;
-  let channel=new HttpsServerChannel(PORT,fs.readFileSync(pki_path + "ballot_provider.key.pem",{encoding:"utf-8"}),fs.readFileSync(pki_path + "ballot_provider.cert.pem",{encoding:"utf-8"}),true);
+  let channel=new HttpsServerChannel(PORT,pki_path + "ballot_provider.key.pem",pki_path + "ballot_provider.cert.pem",true);
   let service=new BallotAuthorizationService(channel,new SQLLiteDataService());
+  service.run();
+
 
 }

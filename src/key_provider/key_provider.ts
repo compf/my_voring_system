@@ -1,7 +1,7 @@
 import { response } from "express";
 import crypto, { checkPrime } from "crypto";
 import { AuthorizationInformation } from "../common/authorization_information";
-import fs from "fs";
+import fs, { writeFileSync } from "fs";
 import https from "https";
 import { CommunicationChannel, HttpMethod } from "../util/communication_channel";
 import { HttpsClientChannel } from "../util/https_channel";
@@ -23,9 +23,13 @@ export class KeyProviderService implements DistributedServerService{
   }
   sendAuthorizationInformation(msg:string):void{
     this.channel.send(msg,null)
+    console.log("sended")
+    this.channel.end(null);
   }
   createAuthorization():string{
-    const body:AuthorizationInformation={time:Date.now(),uuid:this.getNewUid(),provider_id:this.provider_id,election:this.election}
+    let uuid=this.getNewUid()
+    writeFileSync("lastUUID",uuid)
+    const body:AuthorizationInformation={time:Date.now(),uuid:uuid,provider_id:this.provider_id,election:this.election}
     return (JSON.stringify(body));
   }
   run(){
@@ -42,6 +46,9 @@ if(require.main==module){
   const channel="/newUUID";
   const method=HttpMethod.Post;
   const election="btw2021";
+  console.log("cool")
   let service=new KeyProviderService(new HttpsClientChannel(source,dest,destPort,pr_key_path,pub_key_path,channel,method),my_provider_id,election)
-  service.run()
+
+  service.run();
+
 }

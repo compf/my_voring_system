@@ -4,7 +4,7 @@ import { AuthorizationInformation } from "../common/authorization_information";
 import { BallotRequest } from "../common/ballot_request";
 import { IncomingMessage, ServerResponse } from "http";
 import { Http2SecureServer } from "http2";
-import fs, { writeFileSync, writeSync } from "fs";
+import fs, { readFileSync, writeFileSync, writeSync } from "fs";
 import https from "https";
 import http from "http";
 import { DistributedServerService } from "../util/distributed_server_service";
@@ -46,8 +46,8 @@ export class BallotRequesterService implements DistributedServerService {
 }
 if(require.main==module){
   const BALLOT_PROVIDER_PORT=3001
-  const uuid="a91b973f-5a8e-4957-a31b-15521bc8d1b2"
-  let channel=new HttpsClientChannel("", "ballotprovider.compf.me",BALLOT_PROVIDER_PORT,"/dev/null","/dev/null","/getBallot",HttpMethod.Post);
+  const uuid=readFileSync("lastUUID").toString();
+  let channel=new HttpsClientChannel("", "ballotprovider.compf.me",BALLOT_PROVIDER_PORT,undefined,undefined,"/getBallot",HttpMethod.Post);
   let service=new BallotRequesterService(uuid,channel);
   service.run();
 }
