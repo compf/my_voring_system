@@ -75,7 +75,7 @@ export class BallotProviderService implements DistributedServerService{
 if(require.main==module){
   const pki_path=__dirname+"/pki/"
   const BALLOT_PROVIDER_PORT=1998;
-  let channel=new HttpsServerChannel(BALLOT_PROVIDER_PORT,  pki_path+"ballot_provider.key.pem",pki_path+"ballot_provider.cert.pem",false);
+  let channel=new HttpsServerChannel(BALLOT_PROVIDER_PORT,  pki_path+"ballot_provider.key.pem",pki_path+"ballot_provider.cert.pem",false,express.json());
  let service=new BallotProviderService(channel, new SQLLiteDataService());
  service.run();
 }

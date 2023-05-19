@@ -19,8 +19,8 @@ const BALLOT_COLLECTOR_PORT=3002;
 export class BallotCollectorService implements DistributedServerService{
   channel:CommunicationChannel;
   dataService:DataService;
-   isValidBallotRequest(row:any):boolean{
-    let cnt=this.dataService.count("BallotsIssued",(r)=>r["uuid"]==row.id);
+  isValidBallotRequest(dataService:DataService,row:any):boolean{
+    let cnt= dataService.count("BallotsIssued",(row)=>row["uuid"]==row.id);
     console.log(cnt)
     if(cnt>0){
       return false;
@@ -47,7 +47,7 @@ export class BallotCollectorService implements DistributedServerService{
         console.log()
         const timeDiff=body.issueTime.getTime()-parseInt(row.time);
        // console.log(compareHash);
-        if(compareHash==row.id &&  isValidBallotRequest(row)){
+        if(compareHash==row.id &&  isValidBallotRequest(dataService,row)){
          
           response.write("Successful");
           response.end();
@@ -80,7 +80,7 @@ export class BallotCollectorService implements DistributedServerService{
 
 if(require.main){
   const pki_path=__dirname+"/pki/"
-  let channel=new HttpsServerChannel(BALLOT_COLLECTOR_PORT,pki_path+"ballot_collector.key.pem",pki_path+"ballot_collector.cert.pem",false);
+  let channel=new HttpsServerChannel(BALLOT_COLLECTOR_PORT,pki_path+"ballot_collector.key.pem",pki_path+"ballot_collector.cert.pem",false,express.urlencoded({extended: true}));
   let dataService=new SQLLiteDataService();
   let service=new BallotCollectorService(channel,dataService);
   service.run();

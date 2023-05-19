@@ -20,9 +20,9 @@ export class HttpsServerChannel implements CommunicationChannel {
         this.app.post(channel,callback);
        }
     }
-    constructor(srcPort: number, private_key_path: string, public_key_path: string, request_cert: boolean) {
+    constructor(srcPort: number, private_key_path: string, public_key_path: string, request_cert: boolean,type:express.RequestHandler) {
         this.app=express();
-        this.app.use(express.json())
+        this.app.use(type)
         https
             .createServer(
                 {
