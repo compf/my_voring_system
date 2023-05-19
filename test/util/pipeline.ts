@@ -1,7 +1,7 @@
-import { BallotAuthorizationService } from "../../src/ballot_provider/ballot_db";
+import { BallotAuthorizationService } from "../../src/ballot_provider/ballot_authorization_receiver";
 import { BallotProviderService } from "../../src/ballot_provider/ballot_provider";
 import { BallotRequesterService } from "../../src/ballot_requester";
-import { KeyProviderService } from "../../src/key_provider/key_provider";
+import { KeyProviderService } from "../../src/vote_authorization_provider/vote_authorization_provider";
 import { CommunicationChannel, HttpMethod } from "../../src/util/communication_channel";
 import { DataService } from "../../src/util/data_service";
 import { MemoryDatabaseService } from "./memory_database";

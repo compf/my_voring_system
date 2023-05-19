@@ -45,7 +45,7 @@ export class BallotRequesterService implements DistributedServerService {
 
 }
 if(require.main==module){
-  const BALLOT_PROVIDER_PORT=3001
+  const BALLOT_PROVIDER_PORT=1998
   const uuid=readFileSync("lastUUID").toString();
   let channel=new HttpsClientChannel("", "ballotprovider.compf.me",BALLOT_PROVIDER_PORT,undefined,undefined,"/getBallot",HttpMethod.Post);
   let service=new BallotRequesterService(uuid,channel);

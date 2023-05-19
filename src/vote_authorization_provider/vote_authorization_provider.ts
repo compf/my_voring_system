@@ -40,9 +40,9 @@ const my_provider_id="42e521a4-6c41-4024-912e-cd3d19931b83";
 if(require.main==module){
   const source="keyprovider.compf.me";
   const dest="ballotprovider.compf.me";
-  const destPort=3000;
-  const pr_key_path=`${__dirname}/pki/key_provider.key.pem`;
-  const pub_key_path=`${__dirname}/pki/key_provider.crt.pem`;
+  const destPort=1997;
+  const pr_key_path=`${__dirname}/pki/vote_authorization_provider.key.pem`;
+  const pub_key_path=`${__dirname}/pki/vote_authorization_provider.crt.pem`;
   const channel="/newUUID";
   const method=HttpMethod.Post;
   const election="btw2021";

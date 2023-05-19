@@ -34,10 +34,11 @@ export class BallotAuthorizationService implements DistributedServerService{
 }
 if (require.main==module) {
   const pki_path = __dirname + "/pki/"
-  const PORT=3000;
+  const PORT=1997;
   let channel=new HttpsServerChannel(PORT,pki_path + "ballot_provider.key.pem",pki_path + "ballot_provider.cert.pem",true);
   let service=new BallotAuthorizationService(channel,new SQLLiteDataService());
   service.run();
+  console.log("Started ballot auth")
 
 
 }

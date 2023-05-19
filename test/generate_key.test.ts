@@ -1,4 +1,4 @@
-import { KeyProviderService } from "../src/key_provider/key_provider";
+import { KeyProviderService } from "../src/vote_authorization_provider/vote_authorization_provider";
 import { MemoryDatabaseService } from "./util/memory_database";
 import { create_ballot_authorization, create_memory_db, request_ballot } from "./util/pipeline";
 import { SimpleQueueChannel } from "./util/simple__queue_channel";
