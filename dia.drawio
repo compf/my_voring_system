@@ -1,0 +1,98 @@
+<mxfile host="app.diagrams.net" modified="2023-05-20T13:41:54.843Z" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/113.0" etag="bHomsqVt4eRP5rHTtEHQ" version="21.3.2" type="device">
+  <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
+    <mxGraphModel dx="1360" dy="795" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
+        <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
+        <mxCell id="NTwVGz4H2g_4Y5hDfQDA-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fillColor=#a20025;strokeColor=#6F0000;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="NTwVGz4H2g_4Y5hDfQDA-0" target="NTwVGz4H2g_4Y5hDfQDA-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="NTwVGz4H2g_4Y5hDfQDA-3" value="Authorizes production of ballot" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="NTwVGz4H2g_4Y5hDfQDA-2">
+          <mxGeometry x="0.1221" y="1" relative="1" as="geometry">
+            <mxPoint x="-11" y="-9" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NTwVGz4H2g_4Y5hDfQDA-0" value="Vote Authorizer" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="100" y="220" width="260" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="NTwVGz4H2g_4Y5hDfQDA-1" value="Ballot Authorization Receiver" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="600" y="110" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="NTwVGz4H2g_4Y5hDfQDA-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="NTwVGz4H2g_4Y5hDfQDA-1" target="NTwVGz4H2g_4Y5hDfQDA-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="NTwVGz4H2g_4Y5hDfQDA-18" value="Save authorization of ballot" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="NTwVGz4H2g_4Y5hDfQDA-5">
+          <mxGeometry x="-0.2333" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NTwVGz4H2g_4Y5hDfQDA-4" value="Vote Authorization DB" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="520" y="240" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="NTwVGz4H2g_4Y5hDfQDA-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="NTwVGz4H2g_4Y5hDfQDA-6" target="NTwVGz4H2g_4Y5hDfQDA-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="NTwVGz4H2g_4Y5hDfQDA-20" value="Stores when ballot is eventually issued" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="NTwVGz4H2g_4Y5hDfQDA-8">
+          <mxGeometry x="-0.419" y="4" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NTwVGz4H2g_4Y5hDfQDA-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.417;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="NTwVGz4H2g_4Y5hDfQDA-6" target="NTwVGz4H2g_4Y5hDfQDA-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="NTwVGz4H2g_4Y5hDfQDA-19" value="Checks whether ballot is authorized" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="NTwVGz4H2g_4Y5hDfQDA-17">
+          <mxGeometry x="-0.5931" y="-3" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NTwVGz4H2g_4Y5hDfQDA-6" value="Ballot Provider" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="630" y="490" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="NTwVGz4H2g_4Y5hDfQDA-7" value="Ballot Issued DB" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="350" y="530" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="NTwVGz4H2g_4Y5hDfQDA-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="NTwVGz4H2g_4Y5hDfQDA-9" target="NTwVGz4H2g_4Y5hDfQDA-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="NTwVGz4H2g_4Y5hDfQDA-21" value="Request ballot" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="NTwVGz4H2g_4Y5hDfQDA-10">
+          <mxGeometry x="-0.25" y="4" relative="1" as="geometry">
+            <mxPoint x="-56" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NTwVGz4H2g_4Y5hDfQDA-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="NTwVGz4H2g_4Y5hDfQDA-9" target="NTwVGz4H2g_4Y5hDfQDA-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="NTwVGz4H2g_4Y5hDfQDA-9" value="Voter" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="620" y="700" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="NTwVGz4H2g_4Y5hDfQDA-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="NTwVGz4H2g_4Y5hDfQDA-11" target="NTwVGz4H2g_4Y5hDfQDA-12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="NTwVGz4H2g_4Y5hDfQDA-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=1;exitDx=0;exitDy=0;fillColor=#a20025;strokeColor=#6F0000;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="NTwVGz4H2g_4Y5hDfQDA-11" target="NTwVGz4H2g_4Y5hDfQDA-15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="NTwVGz4H2g_4Y5hDfQDA-11" value="Ballot Collector" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="120" y="610" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="NTwVGz4H2g_4Y5hDfQDA-12" value="Collected Ballots DB" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="50" y="910" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="NTwVGz4H2g_4Y5hDfQDA-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="NTwVGz4H2g_4Y5hDfQDA-15" target="NTwVGz4H2g_4Y5hDfQDA-24">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="NTwVGz4H2g_4Y5hDfQDA-15" value="Vote result counter" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="260" y="880" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="NTwVGz4H2g_4Y5hDfQDA-22" value="Text" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="520" y="250" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="NTwVGz4H2g_4Y5hDfQDA-23" value="&lt;font color=&quot;#cc0000&quot;&gt;Authorized client only&lt;br&gt;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="120" y="80" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="NTwVGz4H2g_4Y5hDfQDA-24" value="Vote result" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="540" y="1030" width="120" height="80" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
