@@ -9,5 +9,6 @@ CREATE TABLE BallotAuthorization(
 CREATE TABLE BallotsIssued(
 
     id TEXT,
+    salt TEXT,
     time NUMBER
 );

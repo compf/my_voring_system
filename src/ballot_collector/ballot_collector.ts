@@ -13,6 +13,7 @@ import { CommunicationChannel, HttpMethod } from "../util/communication_channel"
 import { DataService } from "../util/data_service";
 import { HttpsServerChannel } from "../util/https_channel";
 import { SQLLiteDataService } from "../util/sqlite_data_service";
+import { argv } from "process";
 const app = express();
 app.use(express.urlencoded({extended: true}));
 const BALLOT_COLLECTOR_PORT=3002;
@@ -34,24 +35,25 @@ export class BallotCollectorService implements DistributedServerService{
       console.log("request",request.body);
       const b=(request.body["ballot"]);
       const body=fromJSON(b,false);
+      let foundRow:any;
       console.log(body);
       
-       for( let row of dataService.queryAll ("BallotAuthorization")){
+       for( let row of dataService.queryAll ("BallotsIssued")){
         if(finnished.finnished){
           return false;
         }
         console.log("both",body.uuid+row.salt)
         const compareHash=crypto.createHash("sha256").update(body.uuid+row.salt).digest("base64");
     
-        console.log("hash",row.id,compareHash);
+        console.log("hash",row.uuid,compareHash);
         console.log()
         const timeDiff=body.issueTime.getTime()-parseInt(row.time);
        // console.log(compareHash);
         if(compareHash==row.id &&  isValidBallotRequest(dataService,row)){
-         
+          foundRow=row
           response.write("Successful");
           response.end();
-          console.log("compared")
+          console.log("compared",foundRow)
           finnished.finnished=true;
           console.log("we",finnished.finnished)
           

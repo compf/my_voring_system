@@ -12,6 +12,7 @@ import { CommunicationChannel, HttpMethod } from "../util/communication_channel"
 import { HttpsServerChannel } from "../util/https_channel";
 import { DataService } from "../util/data_service";
 import { SQLLiteDataService } from "../util/sqlite_data_service";
+import { argv } from "process";
 export class BallotProviderService implements DistributedServerService{
   channel: CommunicationChannel;
   private db:any;
@@ -36,7 +37,7 @@ export class BallotProviderService implements DistributedServerService{
       console.log("request")
       const body=request.body as BallotRequest ;
       console.log(body);
-      let finalHash=""
+      let foundRow:{id:string,salt:string}={salt:"",id:""}
       service.query("BallotAuthorization",async (row:any)=>{
         console.log("both",body.uuid+row.salt)
         const compareHash=crypto.createHash("sha256").update(body.uuid+row.salt).digest("base64");
@@ -47,13 +48,13 @@ export class BallotProviderService implements DistributedServerService{
        // console.log(compareHash);
         if(compareHash==row.id &&  isValidBallotRequest(service,row)){
           console.log("compared")
-          finalHash=compareHash
+          foundRow=row
 
          
     
         }
       },(x)=>true);
-      service.insert("BallotsIssued",{"uuid":finalHash,"time":new Date().getTime()})
+      service.insert("BallotsIssued",{"id":foundRow!.id,"salt":foundRow.salt,"time":Date.now()})
       let ballot=JSON.parse(readFileSync(__dirname+"/ballot_templates/bundestag.json",{encoding:"utf-8"})) ;
       ballot.uuid=body.uuid;
       for(let v of ballot.groups[0].choices){
@@ -73,6 +74,7 @@ export class BallotProviderService implements DistributedServerService{
   }
 }
 if(require.main==module){
+
   const pki_path=__dirname+"/pki/"
   const BALLOT_PROVIDER_PORT=1998;
   let channel=new HttpsServerChannel(BALLOT_PROVIDER_PORT,  pki_path+"ballot_provider.key.pem",pki_path+"ballot_provider.cert.pem",false,express.json());

@@ -9,6 +9,7 @@ import { DistributedServerService } from "../util/distributed_server_service";
 import { CommunicationChannel, HttpMethod } from "../util/communication_channel";
 import { DataService } from "../util/data_service";
 import { SQLLiteDataService } from "../util/sqlite_data_service";
+import { argv } from "process";
 export class BallotAuthorizationService implements DistributedServerService{
   channel: CommunicationChannel;
   dataService:DataService;
