@@ -1,0 +1,9 @@
+{
+    "report_host":"ballotcollector_country.compf.me",
+    "report_port":1997,
+    "port":1997,
+    "reportFrequency":60,
+    "private_key_file_name":"ballot_collector.key.pem",
+    "public_key_file_name":"ballot_collector.cert.pem",
+    "trusted_only":false
+}

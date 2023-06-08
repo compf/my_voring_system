@@ -1,0 +1,10 @@
+
+{
+ "source":"keyprovider.compf.me",
+ "port":1997,
+ "dest":"ballotprovider.compf.me",
+ "private_key_path":"vote_authorization_provider.key.pem",
+ "public_key_path":"vote_authorization_provider.crt.pem",
+ "election":"btw2021",
+ "provider_id":"42e521a4-6c41-4024-912e-cd3d19931b83"
+}

@@ -1,7 +1,7 @@
 import express from "express";
 import https from "https";
 import http from "http";
-import fs from "fs";
+import fs, { readFileSync } from "fs";
 import { CommunicationChannel, HttpMethod } from "./communication_channel";
 export class HttpsServerChannel implements CommunicationChannel {
     private app:express.Application;
@@ -19,6 +19,14 @@ export class HttpsServerChannel implements CommunicationChannel {
         console.log("register")
         this.app.post(channel,callback);
        }
+    }
+    static fromJSON(json_path:string,loaded_json:any,type:express.RequestHandler,pki_path:string):HttpsServerChannel{
+        const conf=JSON.parse(readFileSync(json_path).toString())
+        let channel=new HttpsServerChannel(conf.port,pki_path+conf.private_key_file_name,pki_path+conf.public_key_file_name,conf.trusted_only,type);
+        for(let key of Object.keys(conf)){
+            loaded_json[key]=conf[key]
+        }
+        return channel
     }
     constructor(srcPort: number, private_key_path: string, public_key_path: string, request_cert: boolean,type:express.RequestHandler) {
         this.app=express();
@@ -43,6 +51,14 @@ export class HttpsServerChannel implements CommunicationChannel {
     }
 }
 export class HttpsClientChannel implements CommunicationChannel{
+    static fromJSON(json_path:string,loaded_json:any,channel:string,method:HttpMethod,pki_path:string):HttpsClientChannel{
+        const conf=JSON.parse(readFileSync(json_path).toString())
+        let result=new HttpsClientChannel(conf.source,conf.dest,conf.port,pki_path+conf.private_key_path,pki_path+conf.public_key_path,channel,method)
+        for(let key of Object.keys(conf)){
+            loaded_json[key]=conf[key]
+        }
+        return result;
+    }
     private request:http.ClientRequest;
     response?:http.ServerResponse;
     send(message: string,over:any): void {
@@ -63,15 +79,15 @@ export class HttpsClientChannel implements CommunicationChannel{
         this.request.on(channel,callback);
     }
     constructor(source:string,dest:string,destPort:number, private_key_path: string|undefined, public_key_path: string|undefined,channel:string,method:HttpMethod){
-        console.log("ctor",method.toString())
+        console.log("ctor",private_key_path,private_key_path==undefined,typeof(private_key_path))
         this.request = https.request(
             {
               host: dest,
               origin:source,
               port: destPort,
               secureProtocol: "TLSv1_2_method",
-              key: private_key_path!=undefined ?fs.readFileSync(private_key_path):undefined,
-              cert: public_key_path!=undefined ? fs.readFileSync(public_key_path):undefined,
+              key: (private_key_path!=undefined && private_key_path!="undefined") ?fs.readFileSync(private_key_path):undefined,
+              cert: (public_key_path!=undefined && public_key_path!="undefined") ? fs.readFileSync(public_key_path):undefined,
               ca: 
                 fs.readFileSync(`pki/my_ca-crt.pem`)
               ,

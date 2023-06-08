@@ -41,13 +41,17 @@ if(require.main==module){
   const source="keyprovider.compf.me";
   const dest="ballotprovider.compf.me";
   const destPort=1997;
+  const pki_path=__dirname+"/pki/"
+
   const pr_key_path=`${__dirname}/pki/vote_authorization_provider.key.pem`;
   const pub_key_path=`${__dirname}/pki/vote_authorization_provider.crt.pem`;
-  const channel="/newUUID";
+  const channelName="/newUUID";
   const method=HttpMethod.Post;
   const election="btw2021";
+  let args:any={}
+  const channel=HttpsClientChannel.fromJSON("conf/vote_authorization_provider.json",args,channelName,method,pki_path);
   console.log("cool")
-  let service=new KeyProviderService(new HttpsClientChannel(source,dest,destPort,pr_key_path,pub_key_path,channel,method),my_provider_id,election)
+  let service=new KeyProviderService(channel,args.provider_id,args.election)
 
   service.run();
 
