@@ -15,6 +15,7 @@ import { HttpsServerChannel } from "../util/https_channel";
 import { SQLLiteDataService } from "../util/sqlite_data_service";
 import { argv } from "process";
 import {VoteCounter } from "../common/vote_counter"
+import { channel } from "diagnostics_channel";
 const BALLOT_COLLECTOR_PORT=3002;
 export class BallotCollectorService implements DistributedServerService{
   channel:CommunicationChannel;
@@ -35,6 +36,7 @@ export class BallotCollectorService implements DistributedServerService{
     const isValidBallotRequest=this.isValidBallotRequest;
     let dataService=this.dataService;
     let counter=this.counter;
+    let meChannel=this.channel;
     this.channel.registerEvent("/submitBallot",HttpMethod.Post, function (request, response) {
       console.log("request",request.body);
       const b=(request.body["ballot"]);
@@ -55,13 +57,15 @@ export class BallotCollectorService implements DistributedServerService{
        // console.log(compareHash);
         if(compareHash==row.id &&  isValidBallotRequest(dataService,row)){
           foundRow=row
-          response.write("Successful");
+       
           for(var group of ballot.groups){
             for(var v of group.votes){
-              counter.count(v[0],true);
+              counter.count(v[1].getKey(),true);
             }
           }
-          response.end();
+          finnished.finnished=true
+          meChannel.send("Successful",null);
+          meChannel.end(response);
           
           
       
@@ -72,8 +76,8 @@ export class BallotCollectorService implements DistributedServerService{
       console.log("finn",finnished.finnished)
       if(!finnished.finnished){
         console.log("cool");
-        response.send("NOT SUCCESSFUL");
-        response.end();
+        meChannel.send("NOT SUCCESSFUL",response);
+        meChannel.end(response);
       }
     
      
@@ -90,7 +94,7 @@ export class BallotCollectorService implements DistributedServerService{
 }
 
 
-if(require.main){
+if(require.main==module){
   const conf:any={}
   const pki_path=__dirname+"/pki/"
 

@@ -1,6 +1,11 @@
+import { AbstractVote } from "../src/common/abstract_vote";
+import { Ballot } from "../src/common/ballot";
+import { BooleanVote } from "../src/common/boolean_vote";
+import { VoteCounter } from "../src/common/vote_counter";
+import { SingleSetMap } from "../src/util/single_set_map";
 import { KeyProviderService } from "../src/vote_authorization_provider/vote_authorization_provider";
 import { MemoryDatabaseService } from "./util/memory_database";
-import { create_ballot_authorization, create_memory_db, request_ballot } from "./util/pipeline";
+import { count_ballot, create_ballot_authorization, create_memory_db, request_ballot } from "./util/pipeline";
 import { SimpleQueueChannel } from "./util/simple__queue_channel";
 
 
@@ -26,3 +31,20 @@ test("test ballot receiving",()=>{
     expect(called).toBeTruthy();
 
 })
+test("test ballot counting",()=>{
+    let db=create_memory_db();
+    create_ballot_authorization(db)
+    let ballot:any={}
+    const callbackVoting=(a:any,b:any)=>{
+       ballot=JSON.parse(a);
+    }
+    request_ballot(db,callbackVoting);
+    ballot.groups[0].votes=new Map();
+   ballot.groups[0].votes["SPD"]=true
+   let counter:{counter:VoteCounter}={counter:null!!};
+   const callbackCounting=(a:any,b:any)=>{
+        expect(counter.counter.getCount("ErstimmeSPD")).toBe(1)
+   }
+   count_ballot(db,{body:{ballot:JSON.stringify(ballot)}},counter,callbackCounting)
+
+});

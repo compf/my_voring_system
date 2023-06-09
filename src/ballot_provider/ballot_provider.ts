@@ -26,7 +26,13 @@ export class BallotProviderService implements DistributedServerService{
     return true;
   }
   sendBallot(ballot:string,responseObject:any){
-    this.channel.send(ballot,responseObject);
+  let instance=this;
+    ejs.renderFile(__dirname+"/ballot_templates/html_template.ejs", {ballot}, function(err, str){
+      console.log(str,err);
+      instance.channel.send(str,responseObject);
+      instance.channel.end(responseObject)
+    });
+   
   }
   run(): void {
     let service=this.dataService;
@@ -49,7 +55,7 @@ export class BallotProviderService implements DistributedServerService{
         if(compareHash==row.id &&  isValidBallotRequest(service,row)){
           console.log("compared")
           foundRow=row
-
+         
          
     
         }
@@ -60,13 +66,9 @@ export class BallotProviderService implements DistributedServerService{
       for(let v of ballot.groups[0].choices){
         console.log(v);
       }
+      me.sendBallot(ballot,response)
      // console.log(ballot.groups[0].choices);
-      ejs.renderFile(__dirname+"/ballot_templates/html_template.ejs", {ballot}, function(err, str){
-        console.log(str,err);
-        me.sendBallot(str,response)
-        
-        channel.end(response)
-      });
+ 
     });}
   constructor(channel:CommunicationChannel,dataService:DataService){
     this.channel=channel;

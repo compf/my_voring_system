@@ -5,6 +5,9 @@ export class VoteCounter{
             this.intern[key]+=internJSON[key]
         }
     }
+    getCount(key:string):number{
+        return this.intern[key]
+    }
     count(key:string,value:number|boolean){
         if (typeof(value)==="boolean"){
             this.count(key,1)

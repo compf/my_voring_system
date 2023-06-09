@@ -6,6 +6,8 @@ import { CommunicationChannel, HttpMethod } from "../../src/util/communication_c
 import { DataService } from "../../src/util/data_service";
 import { MemoryDatabaseService } from "./memory_database";
 import { IdentityParser, JSONParser, SimpleQueueChannel } from "./simple__queue_channel";
+import { BallotCollectorService } from "../../src/ballot_collector/ballot_collector";
+import { VoteCounter } from "../../src/common/vote_counter";
 
 function getNewUid(): string {
     return  "a91b973f-5a8e-4957-a31b-15521bc8d1b2";
@@ -22,7 +24,7 @@ class StubKeyProviderService extends KeyProviderService{
 class StubBallotProviderService extends BallotProviderService{
     sendBallot(ballot: string, responseObject: any): void {
         this.channel.send("",responseObject);
-        this.channel.send(ballot,responseObject);
+        this.channel.send(JSON.stringify(ballot),responseObject);
     }
 }
 class StubBallotRequesterService extends BallotRequesterService{
@@ -70,5 +72,19 @@ export function request_ballot(db:DataService,callback:(a:any,b:any)=>void){
     channel.registerEvent("data2",HttpMethod.Get,callback)
     ballot_provider.run()
     requester.run();
+}
+export function count_ballot(db:DataService,ballot:any,counterHolder:{counter:VoteCounter},responseCallback:(a:any,b:any)=>void){
+    let jsonParser=new JSONParser();
+    let identityParser=new IdentityParser();
+
+    let channel=new SimpleQueueChannel(["/submitBallot","response"],[jsonParser,identityParser])
+    channel.registerEvent("response",HttpMethod.Get,responseCallback)
+    let collector=new BallotCollectorService(channel,db,"",0,0)
+    counterHolder.counter=collector.counter
+    expect(collector.counter.applyInternJSON)
+    collector.run()
+    channel.send(JSON.stringify(ballot),undefined)
+   
+
 }
 
