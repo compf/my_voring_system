@@ -10,7 +10,8 @@
     "vote_authorization_provider": " npm run  init && node build/src/vote_authorization_provider/vote_authorization_provider.js",
     "ballot_provider": " npm run  init && node build/src/ballot_provider/ballot_provider.js",
     "ballot_requester": " npm run  init && node build/src/ballot_requester/index.js",
-    "ballot_collector": " npm run  init && node build/src/ballot_collector/ballot_collector.js"
+    "ballot_collector": " npm run  init && node build/src/ballot_collector/ballot_collector.js",
+    "exporter": "npm run init && node build/src/export_tool.js"
   },
   "author": "",
   "license": "ISC",
@@ -26,9 +27,11 @@
     "jest": "^29.5.0"
   },
   "dependencies": {
+    "@types/adm-zip": "^0.5.0",
     "@types/better-sqlite3": "^7.6.3",
     "@types/node": "^18.11.9",
     "@types/sqlite3": "^3.1.8",
+    "adm-zip": "^0.5.10",
     "better-sqlite3": "^8.0.1",
     "ejs": "^3.1.8",
     "sqlite3": "^5.1.2",
