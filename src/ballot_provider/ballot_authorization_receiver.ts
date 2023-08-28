@@ -3,7 +3,7 @@ import https from "https";
 import fs from "fs";
 import crypto from "crypto";
 
-import { AuthorizationInformation } from "../common/authorization_information";
+import { AuthorizationInformation } from "../model/authorization_information";
 import { HttpsServerChannel } from "../util/https_channel";
 import { DistributedServerService } from "../util/distributed_server_service";
 import { CommunicationChannel, HttpMethod } from "../util/communication_channel";

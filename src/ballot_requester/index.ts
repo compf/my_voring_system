@@ -1,7 +1,7 @@
 import { response } from "express";
 import crypto from "crypto";
-import { AuthorizationInformation } from "../common/authorization_information";
-import { BallotRequest } from "../common/ballot_request";
+import { AuthorizationInformation } from "../model/authorization_information";
+import { BallotRequest } from "../model/ballot_request";
 import { IncomingMessage, ServerResponse } from "http";
 import { Http2SecureServer } from "http2";
 import fs, { readFileSync, writeFileSync, writeSync } from "fs";

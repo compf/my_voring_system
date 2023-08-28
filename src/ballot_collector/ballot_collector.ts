@@ -4,9 +4,9 @@ import fs, { readFileSync } from "fs";
 import crypto from "crypto";
 import ejs from "ejs";
 let finnished={finnished:false};
-import { AuthorizationInformation } from "../common/authorization_information";
-import { BallotRequest } from "../common/ballot_request";
-import { Ballot, fromJSON } from "../common/ballot";
+import { AuthorizationInformation } from "../model/authorization_information";
+import { BallotRequest } from "../model/ballot_request";
+import { Ballot, fromJSON } from "../model/ballot";
 import { count, time } from "console";
 import { DistributedServerService } from "../util/distributed_server_service";
 import { CommunicationChannel, HttpMethod } from "../util/communication_channel";
@@ -14,7 +14,7 @@ import { DataService } from "../util/data_service";
 import { HttpsServerChannel } from "../util/https_channel";
 import { SQLLiteDataService } from "../util/sqlite_data_service";
 import { argv } from "process";
-import {VoteCounter } from "../common/vote_counter"
+import {VoteCounter } from "../model/vote_counter"
 import { channel } from "diagnostics_channel";
 const BALLOT_COLLECTOR_PORT=3002;
 export class BallotCollectorService implements DistributedServerService{

@@ -1,19 +1,15 @@
-import { AbstractVote } from "../src/common/abstract_vote";
-import { Ballot } from "../src/common/ballot";
-import { BooleanVote } from "../src/common/boolean_vote";
-import { VoteCounter } from "../src/common/vote_counter";
+import { AbstractVote } from "../src/model/abstract_vote";
+import { Ballot } from "../src/model/ballot";
+import { BooleanVote } from "../src/model/boolean_vote";
+import { VoteCounter } from "../src/model/vote_counter";
 import { SingleSetMap } from "../src/util/single_set_map";
-import { KeyProviderService } from "../src/vote_authorization_provider/vote_authorization_provider";
+import { VoteAuthorizationService } from "../src/vote_authorization_provider/vote_authorization_provider";
 import { MemoryDatabaseService } from "./util/memory_database";
 import { count_ballot, create_ballot_authorization, create_memory_db, request_ballot } from "./util/pipeline";
 import { SimpleQueueChannel } from "./util/simple__queue_channel";
 
 
-class StubKeyProviderService extends KeyProviderService{
-  createAuthorization(): string {
-      return JSON.stringify({body:super.createAuthorization()})
-  }
-}
+
 test("test key generation",()=>{
     let db=create_memory_db();
     create_ballot_authorization(db)

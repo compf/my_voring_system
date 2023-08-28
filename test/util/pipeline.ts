@@ -1,18 +1,18 @@
 import { BallotAuthorizationService } from "../../src/ballot_provider/ballot_authorization_receiver";
 import { BallotProviderService } from "../../src/ballot_provider/ballot_provider";
 import { BallotRequesterService } from "../../src/ballot_requester";
-import { KeyProviderService } from "../../src/vote_authorization_provider/vote_authorization_provider";
+import { VoteAuthorizationService } from "../../src/vote_authorization_provider/vote_authorization_provider";
 import { CommunicationChannel, HttpMethod } from "../../src/util/communication_channel";
 import { DataService } from "../../src/util/data_service";
 import { MemoryDatabaseService } from "./memory_database";
 import { IdentityParser, JSONParser, SimpleQueueChannel } from "./simple__queue_channel";
 import { BallotCollectorService } from "../../src/ballot_collector/ballot_collector";
-import { VoteCounter } from "../../src/common/vote_counter";
+import { VoteCounter } from "../../src/model/vote_counter";
 
 function getNewUid(): string {
     return  "a91b973f-5a8e-4957-a31b-15521bc8d1b2";
 }
-class StubKeyProviderService extends KeyProviderService{
+class StubVoteAuthorizationService extends VoteAuthorizationService{
   createAuthorization(): string {
    
       return JSON.stringify({body:JSON.parse(super.createAuthorization())})
@@ -59,7 +59,7 @@ export function create_ballot_authorization(db:DataService){
     let channel=new SimpleQueueChannel(["/newUUID"],[new JSONParser()])
     let ballotDbService=new BallotAuthorizationService(channel,db)
     ballotDbService.run();
-    let keyProviderService=new StubKeyProviderService(channel,my_provider_id,election);
+    let keyProviderService=new StubVoteAuthorizationService(channel,my_provider_id,election);
     keyProviderService.run();
 }
 export function request_ballot(db:DataService,callback:(a:any,b:any)=>void){
