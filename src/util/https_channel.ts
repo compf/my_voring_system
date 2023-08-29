@@ -16,7 +16,6 @@ export class HttpsServerChannel implements CommunicationChannel {
         this.app.get(channel,callback);
        }
        else if (method== HttpMethod.Post){
-        console.log("register")
         this.app.post(channel,callback);
        }
     }
@@ -62,8 +61,6 @@ export class HttpsClientChannel implements CommunicationChannel{
     private request:http.ClientRequest;
     response?:http.ServerResponse;
     send(message: string,over:any): void {
-        console.log("use channel",message)
-        console.log(this.request.write(message));
     }
     end(over:any): void {
         this.request.end();
@@ -79,7 +76,6 @@ export class HttpsClientChannel implements CommunicationChannel{
         this.request.on(channel,callback);
     }
     constructor(source:string,dest:string,destPort:number, private_key_path: string|undefined, public_key_path: string|undefined,channel:string,method:HttpMethod){
-        console.log("ctor",private_key_path,private_key_path==undefined,typeof(private_key_path))
         this.request = https.request(
             {
               host: dest,

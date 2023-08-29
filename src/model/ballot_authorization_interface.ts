@@ -1,0 +1,1 @@
+export type BallotAuthorization={id:string,salt:string,time:number}

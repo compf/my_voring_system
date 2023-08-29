@@ -10,22 +10,18 @@ import { CommunicationChannel, HttpMethod } from "../util/communication_channel"
 import { DataService } from "../util/data_service";
 import { SQLLiteDataService } from "../util/sqlite_data_service";
 import { argv } from "process";
+import {Constants} from "../model/constants"
 export class BallotAuthorizationService implements DistributedServerService{
   channel: CommunicationChannel;
   dataService:DataService;
   run(): void {
     let service=this.dataService;
-    console.log("service")
 
-      this.channel.registerEvent("/newUUID",HttpMethod.Post,function (request,response){
+      this.channel.registerEvent(Constants.EVENT_NEW_VOTE_AUTHORIZATION,HttpMethod.Post,function (request,response){
           const body = request.body as AuthorizationInformation;
           const salt = crypto.randomUUID();
-          console.log(body.uuid, salt);
-          console.log(body.uuid + salt);
           let hash = crypto.createHash("sha256").update(body.uuid + salt).digest("base64");
-          console.log("hash", hash);
-          service.insert("BallotAuthorization",{"id":hash, "provider_id":body.provider_id, "time":body.time, "election":body.election, "salt":salt});
-          console.log("Received");
+          service.insert(Constants.TABLE_BALLOT_AUTHORIZATION,{"id":hash, "provider_id":body.provider_id, "time":body.time, "election":body.election, "salt":salt});
         });
   }
   constructor(channel:CommunicationChannel,dataService:DataService){

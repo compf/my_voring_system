@@ -18,7 +18,6 @@ export class SimpleQueueChannel implements CommunicationChannel{
     private eventDict:Map<string,(a:any,b:any)=>void> =new Map();
     send(message: string, over: any): void {
         let next=this.channelQueue.shift()!;
-        console.log("next channel",next)
         let parser=this.parserQueue.shift()!;
         this.eventDict.get(next)!(parser.parse(message),null);
     }

@@ -8,6 +8,7 @@ import { MemoryDatabaseService } from "./memory_database";
 import { IdentityParser, JSONParser, SimpleQueueChannel } from "./simple__queue_channel";
 import { BallotCollectorService } from "../../src/ballot_collector/ballot_collector";
 import { VoteCounter } from "../../src/model/vote_counter";
+import { Constants } from "../../src/model/constants";
 
 function getNewUid(): string {
     return  "a91b973f-5a8e-4957-a31b-15521bc8d1b2";
@@ -65,7 +66,7 @@ export function create_ballot_authorization(db:DataService){
 export function request_ballot(db:DataService,callback:(a:any,b:any)=>void){
     let jsonParser=new JSONParser();
     let identityParser=new IdentityParser();
-    let channel=new SimpleQueueChannel(["/getBallot","response","data","data2"],[jsonParser,identityParser,identityParser,identityParser ])
+    let channel=new SimpleQueueChannel([Constants.EVENT_GET_BALLOT,"response","data","data2"],[jsonParser,identityParser,identityParser,identityParser ])
     
     let requester=new StubBallotRequesterService(channel)
     let ballot_provider=new StubBallotProviderService(channel,db);

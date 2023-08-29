@@ -33,7 +33,6 @@ export class SQLLiteDataService implements DataService{
         let valuesPart=tableName+" VALUES(";
         valuesPart+=args.map((c)=>"?").join(",");
         valuesPart+=")"
-        console.log("values",valuesPart)
         var insertIssuedStatement=this.db.prepare("INSERT INTO "+valuesPart );
         insertIssuedStatement.run(args);
     }

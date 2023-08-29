@@ -30,7 +30,6 @@ export class BallotRequesterService implements DistributedServerService {
         this.processData(fullData)
       });
     });
-    console.log(body);
     this.channel.send(JSON.stringify(body),null);
    
     this.channel.end(null);
@@ -52,7 +51,6 @@ if(require.main==module){
   let service=new BallotRequesterService(uuid,channel);
   service.run();
 }
-const message = { msg: "Hello!" };
 
 
 

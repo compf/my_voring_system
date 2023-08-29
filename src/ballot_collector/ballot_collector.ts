@@ -16,7 +16,9 @@ import { SQLLiteDataService } from "../util/sqlite_data_service";
 import { argv } from "process";
 import {VoteCounter } from "../model/vote_counter"
 import { channel } from "diagnostics_channel";
+import { Constants } from "../model/constants";
 const BALLOT_COLLECTOR_PORT=3002;
+
 export class BallotCollectorService implements DistributedServerService{
   channel:CommunicationChannel;
   dataService:DataService;
@@ -25,8 +27,7 @@ export class BallotCollectorService implements DistributedServerService{
   private reportToPort:number;
   private reportHost:string
   isValidBallotRequest(dataService:DataService,row:any):boolean{
-    let cnt= dataService.count("BallotsIssued",(row)=>row["uuid"]==row.id);
-    console.log(cnt)
+    let cnt= dataService.count(Constants.TABLE_BALLOTS_ISSUED,(row)=>row["uuid"]==row.id);
     if(cnt>0){
       return false;
     }
@@ -37,24 +38,16 @@ export class BallotCollectorService implements DistributedServerService{
     let dataService=this.dataService;
     let counter=this.counter;
     let meChannel=this.channel;
-    this.channel.registerEvent("/submitBallot",HttpMethod.Post, function (request, response) {
-      console.log("request",request.body);
-      const b=(request.body["ballot"]);
+    this.channel.registerEvent(Constants.EVENT_SUBMIT_BALLOT,HttpMethod.Post, function (request, response) {
+      const b=request.body["ballot"];
       const ballot=fromJSON(b,false);
       let foundRow:any;
-      console.log(ballot);
-      
-       for( let row of dataService.queryAll ("BallotsIssued")){
+       for( let row of dataService.queryAll (Constants.TABLE_BALLOTS_ISSUED)){
         if(finnished.finnished){
           return false;
         }
-        console.log("both",ballot.uuid+row.salt)
         const compareHash=crypto.createHash("sha256").update(ballot.uuid+row.salt).digest("base64");
     
-        console.log("hash",row.uuid,compareHash);
-        console.log()
-        const timeDiff=ballot.issueTime.getTime()-parseInt(row.time);
-       // console.log(compareHash);
         if(compareHash==row.id &&  isValidBallotRequest(dataService,row)){
           foundRow=row
        
@@ -73,14 +66,10 @@ export class BallotCollectorService implements DistributedServerService{
     
         }
       };
-      console.log("finn",finnished.finnished)
       if(!finnished.finnished){
-        console.log("cool");
         meChannel.send("NOT SUCCESSFUL",response);
         meChannel.end(response);
       }
-    
-     
     });
   }
   constructor(channel:CommunicationChannel,dataService:DataService,reportHost:string,reportToPort:number,reportFrequency:number){
