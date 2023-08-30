@@ -11,7 +11,7 @@ import { count, time } from "console";
 import { DistributedServerService } from "../util/distributed_server_service";
 import { CommunicationChannel, HttpMethod } from "../util/communication_channel";
 import { DataService } from "../util/data_service";
-import { HttpsServerChannel } from "../util/https_channel";
+import { FileBasedResolver, HttpsServerChannel } from "../util/https_channel";
 import { SQLLiteDataService } from "../util/sqlite_data_service";
 import { argv } from "process";
 import {VoteCounter } from "../model/vote_counter"
@@ -84,10 +84,10 @@ export class BallotCollectorService implements DistributedServerService{
 
 
 if(require.main==module){
-  const conf:any={}
   const pki_path=__dirname+"/pki/"
-
-  let channel=HttpsServerChannel.fromJSON("conf/ballot_collector.json",conf,express.urlencoded({extended: true}),pki_path)
+  let path_resolver=new FileBasedResolver(pki_path)
+  let conf=JSON.parse(readFileSync("conf/ballot_collector.json").toString("utf-8"))
+  let channel=HttpsServerChannel.fromJSON(conf,express.urlencoded({extended: true}),path_resolver)
   let dataService=new SQLLiteDataService();
   let service=new BallotCollectorService(channel,dataService,conf.report_host,conf.report_port,conf.report_frequency);
   service.run();

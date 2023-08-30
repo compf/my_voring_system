@@ -1,10 +1,10 @@
 import { response } from "express";
 import crypto, { checkPrime } from "crypto";
 import { AuthorizationInformation } from "../model/authorization_information";
-import fs, { writeFileSync } from "fs";
+import fs, { readFileSync, writeFileSync } from "fs";
 import https from "https";
 import { CommunicationChannel, HttpMethod } from "../util/communication_channel";
-import { HttpsClientChannel } from "../util/https_channel";
+import { FileBasedResolver, HttpsClientChannel } from "../util/https_channel";
 import { DistributedServerService } from "../util/distributed_server_service";
 import { Constants } from "../model/constants";
 export class VoteAuthorizationService implements DistributedServerService{
@@ -43,9 +43,9 @@ if(require.main==module){
 
   const channelName=Constants.EVENT_NEW_VOTE_AUTHORIZATION;
   const method=HttpMethod.Post;
-  let args:any={}
-  const channel=HttpsClientChannel.fromJSON("conf/vote_authorization_provider.json",args,channelName,method,pki_path);
-  let service=new VoteAuthorizationService(channel,args.provider_id,args.election)
+  let conf=JSON.parse(readFileSync("conf/vote_authorization_provider.json").toString("utf8"))
+  const channel=HttpsClientChannel.fromJSON(conf,new FileBasedResolver(pki_path),channelName,method);
+  let service=new VoteAuthorizationService(channel,conf.provider_id,conf.election)
 
   service.run();
 

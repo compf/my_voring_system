@@ -9,7 +9,7 @@ import https from "https";
 import http from "http";
 import { DistributedServerService } from "../util/distributed_server_service";
 import { CommunicationChannel, HttpMethod } from "../util/communication_channel";
-import { HttpsClientChannel } from "../util/https_channel";
+import { FileBasedResolver, HttpsClientChannel } from "../util/https_channel";
 const my_provider_id = "42e521a4-6c41-4024-912e-cd3d19931b83";
 const exec = require('child_process').exec;
 export class BallotRequesterService implements DistributedServerService {
@@ -45,9 +45,10 @@ export class BallotRequesterService implements DistributedServerService {
 }
 if(require.main==module){
   const BALLOT_PROVIDER_PORT=1998
-  let args:any={}
+  const pki_path=__dirname+"/pki/"
+  let conf=JSON.parse(readFileSync("conf/ballot_requester.json").toString("utf-8"))
   const uuid=readFileSync("lastUUID").toString();
-  let channel=HttpsClientChannel.fromJSON("conf/ballot_requester.json",args,"/getBallot",HttpMethod.Post,"")
+  let channel=HttpsClientChannel.fromJSON(conf,new FileBasedResolver(pki_path),"/getBallot",HttpMethod.Post)
   let service=new BallotRequesterService(uuid,channel);
   service.run();
 }

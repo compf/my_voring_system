@@ -9,7 +9,7 @@ import { Ballot } from "../model/ballot";
 import { time } from "console";
 import { DistributedServerService } from "../util/distributed_server_service";
 import { CommunicationChannel, HttpMethod } from "../util/communication_channel";
-import { HttpsServerChannel } from "../util/https_channel";
+import { FileBasedResolver, HttpsServerChannel } from "../util/https_channel";
 import { DataService } from "../util/data_service";
 import { SQLLiteDataService } from "../util/sqlite_data_service";
 import { argv } from "process";
@@ -65,7 +65,9 @@ export class BallotProviderService implements DistributedServerService{
 if(require.main==module){
 
   const pki_path=__dirname+"/pki/"
-  let channel=HttpsServerChannel.fromJSON("conf/ballot_provider.json",{},express.json(),pki_path)
+  let filr_resolver=new FileBasedResolver(pki_path)
+  let conf=JSON.parse(readFileSync("conf/ballot_provider.json").toString("utf-8"))
+  let channel=HttpsServerChannel.fromJSON(conf,express.json(),filr_resolver)
  let service=new BallotProviderService(channel, new SQLLiteDataService());
  service.run();
 }

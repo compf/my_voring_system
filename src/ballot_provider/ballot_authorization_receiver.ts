@@ -1,10 +1,10 @@
 import express from "express";
 import https from "https";
-import fs from "fs";
+import fs, { readFileSync } from "fs";
 import crypto from "crypto";
 
 import { AuthorizationInformation } from "../model/authorization_information";
-import { HttpsServerChannel } from "../util/https_channel";
+import { FileBasedResolver, HttpsServerChannel } from "../util/https_channel";
 import { DistributedServerService } from "../util/distributed_server_service";
 import { CommunicationChannel, HttpMethod } from "../util/communication_channel";
 import { DataService } from "../util/data_service";
@@ -31,8 +31,9 @@ export class BallotAuthorizationService implements DistributedServerService{
 }
 if (require.main==module) {
   const pki_path=__dirname+"/pki/"
-
-  let channel=HttpsServerChannel.fromJSON("conf/ballot_authorization_provider.json",{},express.json(),pki_path);
+  let file_reolver=new FileBasedResolver(pki_path)
+  let conf=JSON.parse(readFileSync("conf/ballot_authorization_receiver.json").toString("utf-8"))
+  let channel=HttpsServerChannel.fromJSON(conf,express.json(),file_reolver);
   let service=new BallotAuthorizationService(channel,new SQLLiteDataService());
   service.run();
   console.log("Started ballot auth")

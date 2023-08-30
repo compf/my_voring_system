@@ -3,6 +3,20 @@ import https from "https";
 import http from "http";
 import fs, { readFileSync } from "fs";
 import { CommunicationChannel, HttpMethod } from "./communication_channel";
+export interface SSLKeyResolver{
+    resolve(key:string|undefined):string|undefined;
+}
+export class FileBasedResolver implements SSLKeyResolver{
+    pki_path: string;
+    resolve(key: string|undefined): string|undefined {
+        if(key==undefined)return undefined
+       return readFileSync(this.pki_path+key).toString("utf-8")
+    }
+    constructor(pki_path:string){
+        this.pki_path=pki_path
+    }
+    
+}
 export class HttpsServerChannel implements CommunicationChannel {
     private app:express.Application;
     send(message: string,over:any): void {
@@ -19,26 +33,26 @@ export class HttpsServerChannel implements CommunicationChannel {
         this.app.post(channel,callback);
        }
     }
-    static fromJSON(json_path:string,loaded_json:any,type:express.RequestHandler,pki_path:string):HttpsServerChannel{
-        const conf=JSON.parse(readFileSync(json_path).toString())
-        let channel=new HttpsServerChannel(conf.port,pki_path+conf.private_key_file_name,pki_path+conf.public_key_file_name,conf.trusted_only,type);
-        for(let key of Object.keys(conf)){
-            loaded_json[key]=conf[key]
-        }
+    static fromJSON(conf:any,type:express.RequestHandler,key_resolver:SSLKeyResolver):HttpsServerChannel{
+        let channel=new HttpsServerChannel(conf.src_port,key_resolver.resolve(conf.private_key),key_resolver.resolve(conf.public_key),key_resolver.resolve(conf.ca_public),conf.trusted_only,type);
+
         return channel
     }
-    constructor(srcPort: number, private_key_path: string, public_key_path: string, request_cert: boolean,type:express.RequestHandler) {
+    constructor(srcPort: number, private_key: string|undefined, public_key: string|undefined,ca:string|undefined, request_cert: boolean,type:express.RequestHandler) {
+        console.log(arguments)
+
         this.app=express();
         this.app.use(type)
+        console.log(arguments)
         https
             .createServer(
                 {
-                    key: fs.readFileSync(private_key_path),
-                    cert: fs.readFileSync(public_key_path),
+                    key: private_key,
+                    cert: public_key,
 
                     requestCert: request_cert,
                     ca:
-                        fs.readFileSync(`pki/my_ca-crt.pem`),
+                        ca
                 },
                 this.app
             )
@@ -50,12 +64,8 @@ export class HttpsServerChannel implements CommunicationChannel {
     }
 }
 export class HttpsClientChannel implements CommunicationChannel{
-    static fromJSON(json_path:string,loaded_json:any,channel:string,method:HttpMethod,pki_path:string):HttpsClientChannel{
-        const conf=JSON.parse(readFileSync(json_path).toString())
-        let result=new HttpsClientChannel(conf.source,conf.dest,conf.port,pki_path+conf.private_key_path,pki_path+conf.public_key_path,channel,method)
-        for(let key of Object.keys(conf)){
-            loaded_json[key]=conf[key]
-        }
+    static fromJSON(conf:any,key_resolver:SSLKeyResolver,channel:string,method:HttpMethod):HttpsClientChannel{
+        let result=new HttpsClientChannel(conf.source,conf.dest,conf.dest_port,key_resolver.resolve(conf.private_key),key_resolver.resolve(conf.public_key),key_resolver.resolve(conf.ca_public),channel,method)
         return result;
     }
     private request:http.ClientRequest;
@@ -75,17 +85,20 @@ export class HttpsClientChannel implements CommunicationChannel{
         }
         this.request.on(channel,callback);
     }
-    constructor(source:string,dest:string,destPort:number, private_key_path: string|undefined, public_key_path: string|undefined,channel:string,method:HttpMethod){
+    constructor(source:string,dest:string,destPort:number, private_key: string|undefined, public_key: string|undefined,ca:string|undefined,channel:string,method:HttpMethod){
+        
+        console.log(arguments)
+
         this.request = https.request(
             {
               host: dest,
               origin:source,
               port: destPort,
               secureProtocol: "TLSv1_2_method",
-              key: (private_key_path!=undefined && private_key_path!="undefined") ?fs.readFileSync(private_key_path):undefined,
-              cert: (public_key_path!=undefined && public_key_path!="undefined") ? fs.readFileSync(public_key_path):undefined,
+              key:private_key,
+              cert:public_key,
               ca: 
-                fs.readFileSync(`pki/my_ca-crt.pem`)
+                ca
               ,
               path: channel,
               method: HttpMethod[ method].toUpperCase(),

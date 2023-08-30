@@ -1,8 +1,8 @@
 {
-    "type":"ballot_provider",
-    "src_port":1998,
+    "type":"ballot_authorization_receiver",
+    "src_port":1997,
     "ca_public":"my_ca-crt.pem",
     "private_key":"ballot_provider.key.pem",
     "public_key":"ballot_provider.cert.pem",
-    "trusted_only":false
+    "trusted_only":true
 }

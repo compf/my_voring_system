@@ -1,6 +1,8 @@
 
 {
+    "type":"ballot_requester",
     "source":"",
-    "port":1998,
+    "ca_public":"my_ca-crt.pem",
+    "dest_port":1998,
     "dest":"ballotprovider.compf.me"
    }

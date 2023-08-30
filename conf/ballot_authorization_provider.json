@@ -1,7 +1,0 @@
-{
-
-    "port":1997,
-    "private_key_file_name":"ballot_provider.key.pem",
-    "public_key_file_name":"ballot_provider.cert.pem",
-    "trusted_only":true
-}
